@@ -19,9 +19,9 @@ typedef struct List_
 {
 	//node field
 	Pnode_iter iterator;
-	// this line is for checking GITHUB
+	
 	//information field
-	Pnode_iter head_element;
+	Pnode_iter head_element; // PElem???
 	CLONE_FUNC copy_list_elem;
 	DESTROY_FUNC free_list_elem;
 
@@ -54,15 +54,17 @@ Result ListAdd(PList list_elem, PElem linked_elements)
 		return FAIL;
 	}
 	Pnode_iter node = (Pnode_iter)malloc(sizeof(node_iter));
+	//PElem element = (PElem)malloc(sizeof(linked_elements));
 	if (node == NULL)
 	{
 		free(node);
 		return FAIL;
 	}
 	
+	//node = list_elem->iterator;
 	node->address = list_elem->copy_list_elem(linked_elements);
 	node->nextNode = list_elem->head_element;
-	list_elem->head_element = node->address;
+	list_elem->head_element = node;
 
 	return SUCCESS;
 
@@ -75,10 +77,10 @@ PElem ListGetFirst(PList list_elem)
 	if (list_elem == NULL) return NULL;
 	if (list_elem->head_element == NULL)
 	{
-		list_elem->iterator->address = NULL;
+		list_elem->iterator = NULL;
 		return NULL;
 	}
-	list_elem->iterator->address = list_elem->head_element;
+	list_elem->iterator = list_elem->head_element;
 	return list_elem->iterator->address;
 }
 
@@ -93,7 +95,7 @@ PElem ListGetNext(PList list_elem)
 
 	list_elem->iterator = list_elem->iterator->nextNode;
 
-	return list_elem->iterator;
+	return list_elem->iterator->address;
 }
 
 // A function that returns the size of our list.
@@ -131,9 +133,9 @@ Result ListRemove(PList list_elem)// Head_Element should always be the input her
 	{
 		return FAIL;
 	}
+
 	if (list_elem->iterator->address != NULL)
 	{
-		free(list_elem->iterator->address);
 		list_elem->iterator->address = NULL;
 		return SUCCESS;
 	}
@@ -149,13 +151,15 @@ Result ListRemove(PList list_elem)// Head_Element should always be the input her
 			if (temp_Iterator2->nextNode == NULL) // This means the iterator is at the end 
 			{									  // of the list, so we just point the one
 				temp_Iterator1->nextNode = NULL;  // before it to NULL!
-				free(temp_Iterator2->address);
+				//free(temp_Iterator2->address);
+				temp_Iterator2->address = NULL;
 				return SUCCESS;
 			}
 			else
 			{
 				temp_Iterator1->nextNode = temp_Iterator2->nextNode;
-				free(temp_Iterator2->address);
+				//free(temp_Iterator2->address);
+				temp_Iterator2->address = NULL;
 				return SUCCESS;
 			}
 		}
@@ -177,7 +181,7 @@ void ListDestroy(PList list_elem)
 	PList temp = list_elem;
 	while (temp->head_element != NULL)
 	{
-		temp->head_element = temp->iterator->nextNode;
+		temp->head_element = temp->head_element->nextNode;
 		list_elem->free_list_elem(list_elem->head_element);
 		list_elem->head_element = temp->head_element;
 	}

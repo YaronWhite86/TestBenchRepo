@@ -11,7 +11,7 @@
 // A function to check the action type of our input 
 Result Command(char* input) {
 	if (((strcmp(input, "Create") == 0) || (strcmp(input, "Destroy") == 0) || (strcmp(input, "Add") == 0) ||
-		(strcmp(input, "First") == 0) || (strcmp(input, "Next") == 0) ||
+		(strcmp(input, "First") == 0) || (strcmp(input, "Next") == 0) || (strcmp(input, "Print") == 0) ||
 		(strcmp(input, "Remove") == 0) || (strcmp(input, "GetSize") == 0)) == 0) return FAIL;
 	else return SUCCESS;
 }
@@ -38,10 +38,33 @@ int Number_of_Inputs(char input[])
 	
 	return count;
 }
+// Just something to put in our test program
 int testFunction(int input)
 {
 	return input;
 }
+// This will be the structure of our iterator
+typedef struct node_iter
+{
+	//node field
+	struct node_iter* nextNode;
+
+	//information field
+	PElem address;
+}*Pnode_iter, node_iter;
+
+// This is our linked list that holds the relevant information
+typedef struct List_
+{
+	//node field
+	Pnode_iter iterator;
+
+	//information field
+	Pnode_iter head_element; // PElem???
+	CLONE_FUNC copy_list_elem;
+	DESTROY_FUNC free_list_elem;
+
+}List_, *PList;
 
 int main(char argc, char* argv[]) {
 	char szLine[MAX_LINE_SIZE];
@@ -50,8 +73,7 @@ int main(char argc, char* argv[]) {
 	char* arg1;
 	int inputCount;
 	int address = 1000;
-	//char* arg2;
-	//char* arg3;
+	
 	PList TheList;
 	FILE *fp;
 
@@ -101,7 +123,7 @@ int main(char argc, char* argv[]) {
 		}
 		if (strcmp(command, "Add") == 0)
 		{
-			int j = ListAdd(TheList, address++);
+			Result j = ListAdd(TheList, address++);
 			if (j == FAIL)
 			{
 				fprintf(stderr, "Add execution Failed.\n");
@@ -117,6 +139,7 @@ int main(char argc, char* argv[]) {
 		if (strcmp(command, "First") == 0)
 		{
 			PElem j = ListGetFirst(TheList);
+			
 			if (j == NULL)
 			{
 				fprintf(stderr, "First execution Failed.\n");
@@ -154,6 +177,20 @@ int main(char argc, char* argv[]) {
 			}
 			else continue;
 		}
+		if (strcmp(command, "Print") == 0)
+		{	
+			PList tempList = TheList;
+			while(tempList->head_element != NULL)
+			{
+				fprintf(stderr, ">NODE %d \n", tempList->head_element);
+				tempList->head_element = tempList->head_element->nextNode;
+				continue;
+			}
+			fprintf(stderr, "DONE\n");
+			continue;
+		}
 	}
-	free(TheList);
+	//free(TheList);
+	fclose(fp);
+	return 0;
 }
