@@ -182,7 +182,7 @@ int main(char argc, char* argv[]) {
 			PList tempList = TheList;
 			while(tempList->head_element != NULL)
 			{
-				fprintf(stderr, ">NODE %d \n", tempList->head_element);
+				fprintf(stderr, ">NODE %d \n", tempList->head_element->address);
 				tempList->head_element = tempList->head_element->nextNode;
 				continue;
 			}

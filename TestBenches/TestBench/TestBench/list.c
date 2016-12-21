@@ -91,7 +91,7 @@ PElem ListGetNext(PList list_elem)
 	if (list_elem == NULL) return NULL;
 	if (list_elem->head_element == NULL) return NULL;
 	if (list_elem->iterator == NULL) return NULL;
-	if (list_elem->iterator->nextNode == NULL) return NULL;
+	if (list_elem->iterator->nextNode == NULL) return NULL; // No next node to point to!
 
 	list_elem->iterator = list_elem->iterator->nextNode;
 
@@ -117,7 +117,7 @@ int ListGetSize(PList list_elem)
 	}
 	return counter;
 }
-
+/*
 Result ListRemove(PList list_elem)// Head_Element should always be the input here 
 								  // so we start from beginning of the list! (I think)
 {
@@ -171,6 +171,49 @@ Result ListRemove(PList list_elem)// Head_Element should always be the input her
 			temp_Iterator1->nextNode = temp_Iterator1->nextNode->nextNode;
 			continue;
 		}
+	}
+}*/
+
+Result ListRemove(PList list_elem)
+{	
+	if (list_elem == NULL) return FAIL;
+	if (list_elem->head_element == NULL) return FAIL;
+	if (list_elem->iterator == NULL) return FAIL;
+	if (list_elem->iterator->address == NULL) return FAIL;
+	if (list_elem->head_element->nextNode == NULL)// Checking if there is only one node in the list.
+	{
+		if (list_elem->head_element->address != list_elem->iterator->address) return FAIL;
+		else
+		{
+			list_elem->head_element->address = NULL;
+			list_elem->iterator->address = NULL;
+			return SUCCESS;
+		}
+	}
+	Pnode_iter temp1 = list_elem->head_element; // Is now head element
+	//Pnode_iter temp2;
+	while (1)
+	{
+		if (temp1 == NULL || temp1->address == NULL) return FAIL;
+		if (temp1->address == list_elem->iterator->address)
+		{
+			if (temp1->nextNode == NULL)
+			{
+				temp1->address = NULL;
+				list_elem->iterator->address = NULL;
+				//list_elem->iterator->address == NULL;
+				return SUCCESS;
+			}
+			else
+			{
+				temp1->address = NULL;
+				temp1 = temp1->nextNode;
+				//temp1 = temp2;
+				list_elem->iterator->address = NULL;
+				return SUCCESS;
+			}
+		}
+		temp1 = temp1->nextNode;
 	}
 }
 
