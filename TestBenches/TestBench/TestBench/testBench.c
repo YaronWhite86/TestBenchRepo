@@ -175,16 +175,29 @@ int main(char argc, char* argv[]) {
 				fprintf(stderr, "Get execution Failed.\n");
 				continue;
 			}
-			else continue;
+
+			else
+			{
+				fprintf(stderr, "Size is %d\n", j);
+				continue;
+			}
 		}
 		if (strcmp(command, "Print") == 0)
 		{	
 			PList tempList = TheList;
 			while(tempList->head_element != NULL)
 			{
-				fprintf(stderr, ">NODE %d \n", tempList->head_element->address);
-				tempList->head_element = tempList->head_element->nextNode;
-				continue;
+				if (tempList->head_element->address == NULL)
+				{
+					tempList->head_element = tempList->head_element->nextNode;
+					continue;
+				}
+				else
+				{
+					fprintf(stderr, ">NODE %d \n", tempList->head_element->address);
+					tempList->head_element = tempList->head_element->nextNode;
+					continue;
+				}
 			}
 			fprintf(stderr, "DONE\n");
 			continue;

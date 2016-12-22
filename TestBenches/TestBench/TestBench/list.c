@@ -21,7 +21,7 @@ typedef struct List_
 	Pnode_iter iterator;
 	
 	//information field
-	Pnode_iter head_element; // PElem???
+	Pnode_iter head_element; 
 	CLONE_FUNC copy_list_elem;
 	DESTROY_FUNC free_list_elem;
 
@@ -70,7 +70,7 @@ Result ListAdd(PList list_elem, PElem linked_elements)
 
 }
 
-// A function that returns moves our iterator to the front of the linked list
+// A function that moves our iterator to the front of the linked list
 // and returns a pointer to the node that the iterator is pointing to.
 PElem ListGetFirst(PList list_elem)
 {
@@ -191,7 +191,6 @@ Result ListRemove(PList list_elem)
 		}
 	}
 	Pnode_iter temp1 = list_elem->head_element; // Is now head element
-	//Pnode_iter temp2;
 	while (1)
 	{
 		if (temp1 == NULL || temp1->address == NULL) return FAIL;
@@ -201,15 +200,15 @@ Result ListRemove(PList list_elem)
 			{
 				temp1->address = NULL;
 				list_elem->iterator->address = NULL;
-				//list_elem->iterator->address == NULL;
+				list_elem->head_element = temp1;
 				return SUCCESS;
 			}
 			else
 			{
 				temp1->address = NULL;
 				temp1 = temp1->nextNode;
-				//temp1 = temp2;
 				list_elem->iterator->address = NULL;
+				list_elem->head_element = temp1;
 				return SUCCESS;
 			}
 		}

@@ -1,0 +1,21 @@
+Create 9000
+GetSize
+Add 7
+Add 6
+Add 6
+Add 5
+First
+Next
+Remove
+GetSize
+Add 4
+Add 3
+GetSize
+First
+Remove
+First
+Remove
+First
+Remove
+Print
+Destroy
